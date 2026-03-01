@@ -1,0 +1,125 @@
+
+<odoo>
+    <record id="view_fsm_order_spare_part_list" model="ir.ui.view">
+        <field name="name">fsm.order.spare.part.list</field>
+        <field name="model">fsm.order.spare.part</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name" readonly="1"/>
+                <field name="fsm_order_id" invisible="1"/>
+                <field name="equipment_id" options="{'no_create': True}"/>
+                <field name="product_id" options="{'no_create': True}"/>
+                <field name="quantity"/>
+                <field name="uom_id" readonly="1"/>
+                <field name="warranty_state" readonly="1"
+                       decoration-success="warranty_state == 'in_warranty' or warranty_state == 'in_agreement_spare'"
+                       decoration-warning="warranty_state == 'out_warranty' or warranty_state == 'in_agreement_no_spare'"/>
+                <field name="state" readonly="1" widget="badge"
+                       decoration-muted="state == 'draft'"
+                       decoration-info="state == 'requested'"
+                       decoration-primary="state == 'received'"
+                       decoration-success="state == 'installed'"
+                       decoration-danger="state == 'returned'"/>
+                <field name="sale_order_id" readonly="1" invisible="not sale_order_id"/>
+                <button name="action_confirm" type="object"
+                        string="Confirm" class="btn-primary"
+                        invisible="state != 'draft'"/>
+                <button name="action_mark_received" type="object"
+                        string="Receive" class="btn-secondary"
+                        invisible="state != 'requested'"/>
+                <button name="action_mark_installed" type="object"
+                        string="Install" class="btn-success"
+                        invisible="state != 'received'"/>
+                <button name="action_create_return" type="object"
+                        string="Return" class="btn-danger"
+                        invisible="state not in ('received', 'installed')"/>
+                <button name="action_view_sale_order" type="object"
+                        string="View Quote" class="btn-secondary"
+                        invisible="not sale_order_id"/>
+                <button name="action_view_delivery" type="object"
+                        string="Delivery" class="btn-secondary"
+                        invisible="not delivery_order_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fsm_order_spare_part_form" model="ir.ui.view">
+        <field name="name">fsm.order.spare.part.form</field>
+        <field name="model">fsm.order.spare.part</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,requested,received,installed,returned"/>
+                    <button name="action_confirm" type="object"
+                            string="Confirm Request" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_mark_received" type="object"
+                            string="Mark Received" class="oe_highlight"
+                            invisible="state != 'requested'"/>
+                    <button name="action_mark_installed" type="object"
+                            string="Mark Installed" class="oe_highlight"
+                            invisible="state != 'received'"/>
+                    <button name="action_create_return" type="object"
+                            string="Return to Warehouse" class="btn-danger"
+                            invisible="state not in ('received', 'installed')"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="fsm_order_id"/>
+                            <field name="equipment_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="warranty_state" readonly="1"/>
+                            <field name="is_auto_flow" readonly="1"/>
+                            <field name="quotation_group_id" readonly="1" invisible="not quotation_group_id"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Quantities Tracking">
+                        <group>
+                            <field name="requested_qty" readonly="1"/>
+                            <field name="received_qty" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="installed_qty" readonly="1"/>
+                            <field name="returned_qty" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Dates">
+                        <group>
+                            <field name="installation_date" readonly="1"/>
+                            <field name="return_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Related Documents">
+                        <field name="sale_order_id" readonly="1"
+                               invisible="not sale_order_id"/>
+                        <field name="delivery_order_id" readonly="1"
+                               invisible="not delivery_order_id"/>
+                        <field name="return_picking_id" readonly="1"
+                               invisible="not return_picking_id"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fsm_order_spare_part" model="ir.actions.act_window">
+        <field name="name">Spare Parts</field>
+        <field name="res_model">fsm.order.spare.part</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

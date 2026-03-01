@@ -1,0 +1,66 @@
+
+<odoo>
+    <record id="fsm_equipment_form_inherit_warranty" model="ir.ui.view">
+        <field name="name">fsm.equipment.form.warranty</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_form_view"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Add button box first -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_installed_spare_parts"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-wrench"
+                        invisible="current_spare_parts_qty == 0">
+                    <div class="o_stat_info">
+                        <field name="current_spare_parts_qty" class="o_stat_value"/>
+                        <span class="o_stat_text">Installed</span>
+                    </div>
+                </button>
+            </xpath>
+            
+            <!-- BEFORE notebook -->
+            <xpath expr="//notebook" position="before">
+                <!-- Warranty Group -->
+                <group string="Warranty Information">
+                    <group>
+                        <field name="warranty_start_date"/>
+                        <field name="warranty_end_date"/>
+                    </group>
+                </group>
+                
+                <!-- Spare Parts Summary -->
+                <group string="Spare Parts Summary" invisible="current_spare_parts_qty == 0">
+                    <group>
+                        <field name="current_spare_parts_qty" readonly="1" string="Current Installed"/>
+                        <field name="total_returned_qty" readonly="1" string="Returned"/>
+                    </group>
+                </group>
+                
+                <!-- Spare Parts History Table -->
+                <group string="Spare Parts History" invisible="spare_parts_count == 0">
+                    <field name="spare_part_ids" readonly="1" nolabel="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="fsm_order_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'requested'"
+                                   decoration-primary="state == 'received'"
+                                   decoration-success="state == 'installed'"
+                                   decoration-danger="state == 'returned'"
+                                   decoration-muted="state == 'draft'"/>
+                            <field name="create_date" string="Request Date"/>
+                            <field name="installation_date"/>
+                            <field name="return_date"/>
+                        </list>
+                    </field>
+                </group>
+                
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

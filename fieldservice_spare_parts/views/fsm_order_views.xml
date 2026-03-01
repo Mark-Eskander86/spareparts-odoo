@@ -1,0 +1,27 @@
+
+<odoo>
+    <record id="fsm_order_form_inherit_spare_parts" model="ir.ui.view">
+        <field name="name">fsm.order.form.spare.parts</field>
+        <field name="model">fsm.order</field>
+        <field name="inherit_id" ref="fieldservice.fsm_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add button in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_view_spare_parts"
+                        type="object"
+                        string="Spare Parts"
+                        class="oe_highlight"
+                        invisible="spare_parts_count == 0"/>
+            </xpath>
+
+            <!-- Add spare parts page -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Spare Parts" name="spare_parts">
+                    <field name="spare_part_ids"
+                           widget="one2many"
+                           options="{'mode': 'list,form'}"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+
+<odoo>
+    <record id="seq_fsm_spare_part" model="ir.sequence">
+        <field name="name">FSM Spare Part</field>
+        <field name="code">fsm.order.spare.part</field>
+        <field name="prefix">SP/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

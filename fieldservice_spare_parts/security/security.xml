@@ -1,0 +1,31 @@
+
+<odoo>
+    <!-- Access Rights for Users -->
+    <record id="access_fsm_order_spare_part_user" model="ir.model.access">
+        <field name="name">FSM Order Spare Part User</field>
+        <field name="model_id" ref="model_fsm_order_spare_part"/>
+        <field name="group_id" ref="fieldservice.group_fsm_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <!-- Access Rights for Managers -->
+    <record id="access_fsm_order_spare_part_manager" model="ir.model.access">
+        <field name="name">FSM Order Spare Part Manager</field>
+        <field name="model_id" ref="model_fsm_order_spare_part"/>
+        <field name="group_id" ref="fieldservice.group_fsm_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Multi-company rule -->
+    <record id="rule_fsm_spare_part_multi_company" model="ir.rule">
+        <field name="name">FSM Spare Part Multi Company</field>
+        <field name="model_id" ref="model_fsm_order_spare_part"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

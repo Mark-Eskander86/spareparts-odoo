@@ -1,0 +1,34 @@
+
+<odoo>
+    <record id="agreement_form_inherit_spare_parts" model="ir.ui.view">
+        <field name="name">agreement.form.spare.parts</field>
+        <field name="model">agreement</field>
+        <field name="inherit_id" ref="agreement.agreement_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_all_spare_parts"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-wrench"
+                        invisible="current_spare_parts_qty == 0">
+                    <div class="o_stat_info">
+                        <field name="current_spare_parts_qty" class="o_stat_value"/>
+                        <span class="o_stat_text">Installed Spare Parts</span>
+                    </div>
+                </button>
+            </xpath>
+            
+            <xpath expr="//sheet/group[1]" position="after">
+                <group string="Spare Parts Summary" invisible="x_spare_parts_included == False">
+                    <group>
+                        <field name="x_spare_parts_included"/>
+                    </group>
+                    <group>
+                        <field name="current_spare_parts_qty" readonly="1"/>
+                        <field name="total_returned_qty" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

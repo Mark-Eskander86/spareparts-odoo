@@ -1,0 +1,51 @@
+
+<odoo>
+    <!-- Inherit Delivery Order Form -->
+    <record id="view_picking_form_inherit_spare_parts" model="ir.ui.view">
+        <field name="name">stock.picking.form.spare.parts</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Add after origin -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="fsm_spare_part_id" invisible="not fsm_spare_part_id" readonly="1"/>
+                <field name="warranty_state" invisible="not fsm_spare_part_id" readonly="1"/>
+            </xpath>
+            
+            <!-- Add equipment/agreement info box -->
+            <xpath expr="//sheet" position="inside">
+                <group string="Equipment Information" invisible="not fsm_spare_part_id">
+                    <group>
+                        <!-- For In Warranty: Show Equipment Link -->
+                        <button name="action_view_equipment"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-wrench"
+                                invisible="warranty_state != 'in_warranty' or not equipment_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Equipment</span>
+                                <field name="equipment_link" class="o_stat_value"/>
+                            </div>
+                        </button>
+                        
+                        <!-- For In Agreement: Show Agreement Link -->
+                        <button name="action_view_agreement"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-text"
+                                invisible="warranty_state != 'in_agreement_spare' or not agreement_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Agreement</span>
+                                <field name="agreement_link" class="o_stat_value"/>
+                            </div>
+                        </button>
+                    </group>
+                    <group>
+                        <field name="equipment_id" invisible="warranty_state != 'in_warranty'" readonly="1"/>
+                        <field name="agreement_id" invisible="warranty_state != 'in_agreement_spare'" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
